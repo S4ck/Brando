@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flyer Virtual - Promociones Brando</title>
+    <style>
+        /* ============================================================
+           VARIABLES GLOBALES (Modo Oscuro / Claro)
+           ============================================================ */
+        :root {
+            --bg-body: #1a1a2e;
+            --bg-container: linear-gradient(145deg, #0f0f1f, #1a1a2e);
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border-card: rgba(255, 255, 255, 0.06);
+            --text-primary: #f0f0ff;
+            --text-secondary: #b0b0c8;
+            --text-muted: #707090;
+            --shadow-card: 0 8px 20px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 215, 0, 0.05);
+            --badge-bg: #e94560;
+            --badge-text: #fff;
+            --btn-whatsapp: linear-gradient(135deg, #25d366, #128C7E);
+            --btn-whatsapp-hover: linear-gradient(135deg, #31d676, #14a085);
+            --gold: #ffd700;
+            --gold-dark: #f7971e;
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="light"] {
+            --bg-body: #f5f5f7;
+            --bg-container: linear-gradient(145deg, #ffffff, #f0f0f5);
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --border-card: rgba(0, 0, 0, 0.08);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #9090b0;
+            --shadow-card: 0 8px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 16px 40px rgba(0, 0, 0, 0.12), 0 0 30px rgba(255, 215, 0, 0.1);
+            --glass-border: rgba(0, 0, 0, 0.06);
+            --badge-bg: #e94560;
+            --badge-text: #fff;
+        }
+
+        /* ============================================================
+           RESET Y ESTILOS GENERALES
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ============================================================
+           CONTENEDOR PRINCIPAL DEL FLYER
+           ============================================================ */
+        .flyer-container {
+            max-width: 1200px;
+            width: 100%;
+            background: var(--bg-container);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .flyer-header {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 2px dashed rgba(255, 215, 0, 0.25);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        /* --- Switch Modo Oscuro/Claro --- */
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .flyer-header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .flyer-header p {
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            margin-top: 8px;
+            letter-spacing: 4px;
+            font-weight: 300;
+        }
+
+        .badge-oferta {
+            display: inline-block;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            font-weight: 700;
+            padding: 6px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-top: 12px;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
+            text-transform: uppercase;
+        }
+
+        /* ============================================================
+           CONTADOR REGRESIVO
+           ============================================================ */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0 10px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 10px 20px;
+            min-width: 70px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .countdown-item .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+            display: block;
+            line-height: 1.2;
+        }
+
+        .countdown-item .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           GRID DE PRODUCTOS
+           ============================================================ */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 20px 0 30px;
+        }
+
+        /* ============================================================
+           TARJETA DE PRODUCTO (con animación de entrada)
+           ============================================================ */
+        .product-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 20px 16px 24px;
+            text-align: center;
+            border: 1px solid var(--border-card);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: cardFadeIn 0.5s ease backwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(40px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(255, 215, 0, 0.4);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* --- Imagen (con soporte para URL o emoji) --- */
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            max-width: 180px;
+            border-radius: 20px;
+            background: var(--bg-body);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin: 0 auto 16px;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-card);
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .product-card:hover .product-image {
+            border-color: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
+        }
+
+        /* --- Categoría --- */
+        .product-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            background: rgba(255, 215, 0, 0.08);
+            padding: 2px 14px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            margin-bottom: 6px;
+        }
+
+        .product-name {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 4px 0 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .product-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            min-height: 40px;
+        }
+
+        /* --- Precio con animación "pulso" --- */
+        .product-price {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+            margin: 4px 0 10px;
+            letter-spacing: 1px;
+            animation: pricePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pricePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        .product-price small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            text-decoration: line-through;
+            margin-left: 10px;
+            opacity: 0.6;
+            animation: none;
+        }
+
+        /* --- Stock --- */
+        .product-stock {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .product-stock span {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .product-stock .low-stock {
+            color: #ff9800;
+        }
+
+        /* --- Botón WhatsApp --- */
+        .btn-cta {
+            background: var(--btn-whatsapp);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            width: 100%;
+            max-width: 200px;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.25);
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.04);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+            background: var(--btn-whatsapp-hover);
+        }
+
+        .btn-cta:active {
+            transform: scale(0.96);
+        }
+
+        /* ============================================================
+           PIE DE PÁGINA
+           ============================================================ */
+        .flyer-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-top: 1px solid var(--border-card);
+            padding-top: 25px;
+            margin-top: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .flyer-footer .contacto {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .flyer-footer .contacto span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .flyer-footer .contacto i {
+            font-style: normal;
+            background: var(--bg-card);
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+
+        .tag-custom {
+            background: rgba(255, 215, 0, 0.08);
+            color: var(--gold);
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 640px) {
+            .flyer-container {
+                padding: 16px;
+                border-radius: 28px;
+            }
+            .product-grid {
+                gap: 18px;
+            }
+            .product-card {
+                padding: 16px 12px 20px;
+            }
+            .flyer-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .countdown-container {
+                gap: 10px;
+            }
+            .countdown-item {
+                padding: 6px 14px;
+                min-width: 60px;
+            }
+            .countdown-item .number {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* ============================================================
+           ESTILOS PARA EL TOAST DE NOTIFICACIÓN
+           ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: none;
+            z-index: 999;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success {
+            background: #1e7e34;
+            border-color: #4caf50;
+        }
+
+        .toast.error {
+            background: #b71c1c;
+            border-color: #e94560;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+     TOAST DE NOTIFICACIÓN
+     ============================================================ -->
+<div id="toast" class="toast">✅ Producto registrado en Dolibarr</div>
+
+<!-- ============================================================
+     FLYER PRINCIPAL
+     ============================================================ -->
+<div class="flyer-container">
+
+    <!-- ===== HEADER ===== -->
+    <header class="flyer-header">
+        <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+            <span id="themeIcon">🌙</span> <span id="themeLabel">Oscuro</span>
+        </button>
+
+        <h1>🍾 OFERTAS BRANDO</h1>
+        <p>✦ PROMOCIÓN VÁLIDA HASTA AGOTAR STOCK ✦</p>
+        <span class="badge-oferta">🔥 20% DTO. EN COMPRA MÍNIMA</span>
+
+        <!-- Contador regresivo -->
+        <div class="countdown-container" id="countdown">
+            <div class="countdown-item">
+                <span class="number" id="days">00</span>
+                <span class="label">Días</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="hours">00</span>
+                <span class="label">Horas</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Min</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="seconds">00</span>
+                <span class="label">Seg</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== GRID DE PRODUCTOS ===== -->
+    <div class="product-grid" id="productGrid"></div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="flyer-footer">
+        <div class="contacto">
+            <span>📞 <strong>+51 913 682 852</strong></span>
+            <span>📍 <strong>Av. José Galvez 615, Barranca</strong></span>
+            <span>🕒 <strong>Lun-Jue 10am-2am y Vie-Dom 10am-4am</strong></span>
+        </div>
+        <div class="tag-custom">✨ ¡Escanea y pide por WhatsApp!</div>
+    </footer>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT - TODA LA LÓGICA
+     ============================================================ -->
+<script>
+   (function() {
+    'use strict';
+
+    console.log('🚀 ===== INICIANDO FLYER =====');
+    console.log('📅', new Date().toLocaleString());
+
+    // ============================================================
+    //  1. CONFIGURACIÓN DE DOLIBARR (API REAL)
+    // ============================================================
+    const DOLIBARR_API_URL = 'https://brando.servitelperu.com/htdocs/api/index.php';
+    const DOLIBARR_API_KEY = 'SbmLfOcbMsJw';
+
+    console.log('📡 API URL:', DOLIBARR_API_URL);
+    console.log('🔑 API Key (primeros 4 chars):', DOLIBARR_API_KEY.substring(0, 4) + '...');
+
+    // ============================================================
+    //  2. CONFIGURACIÓN DE WHATSAPP
+    // ============================================================
+    const TELEFONO_WHATSAPP = '51913682852';
+    const MENSAJE_BASE = 'Hola, estoy interesado en el producto: ';
+
+    // ============================================================
+    //  3. FUNCIÓN PARA OBTENER PRODUCTOS CON LOGS DETALLADOS
+    // ============================================================
+    async function obtenerProductosDeDolibarr() {
+        console.log('🔍 === OBJETENIENDO PRODUCTOS DE DOLIBARR ===');
+        
+        try {
+            // Intentar diferentes endpoints
+            const endpoints = [
+                `${DOLIBARR_API_URL}/products?limit=100`,
+                `${DOLIBARR_API_URL}/products?limit=10`,
+                `${DOLIBARR_API_URL}/products`,
+                `${DOLIBARR_API_URL}/products?sortfield=t.rowid&sortorder=ASC&limit=100`
+            ];
+
+            let ultimoError = null;
+
+            for (let i = 0; i < endpoints.length; i++) {
+                const url = endpoints[i];
+                console.log(`📡 Intento ${i + 1}: GET ${url}`);
+                
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'DOLAPIKEY': DOLIBARR_API_KEY,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    console.log(`📊 Status: ${response.status} ${response.statusText}`);
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error(`❌ Error en intento ${i + 1}:`, errorText);
+                        ultimoError = new Error(`HTTP ${response.status}: ${errorText}`);
+                        continue;
+                    }
+
+                    const data = await response.json();
+                    console.log(`✅ Éxito en intento ${i + 1}! Productos obtenidos:`, data.length || '?');
+                    console.log('📦 Primer producto:', data[0] || 'No hay productos');
+                    return data;
+
+                } catch (error) {
+                    console.error(`❌ Error en intento ${i + 1}:`, error.message);
+                    ultimoError = error;
+                }
+            }
+
+            // Si llegamos aquí, todos los intentos fallaron
+            console.error('❌ Todos los intentos fallaron');
+            throw ultimoError || new Error('No se pudo conectar con Dolibarr');
+
+        } catch (error) {
+            console.error('❌ ERROR FINAL al obtener productos:', error);
+            console.error('📋 Detalles del error:', {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+            
+            // Mostrar error en la UI
+            showToast(`❌ Error: ${error.message}`, 'error');
+            return [];
+        }
+    }
+
+    // ============================================================
+    //  4. TOAST DE NOTIFICACIÓN
+    // ============================================================
+    const toast = document.getElementById('toast');
+    let toastTimeout = null;
+
+    function showToast(message, type = 'success') {
+        console.log(`📢 TOAST [${type}]:`, message);
+        toast.textContent = message;
+        toast.className = `toast ${type}`;
+        void toast.offsetWidth;
+        toast.classList.add('show');
+
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 5000);
+    }
+
+    // ============================================================
+    //  5. RENDERIZADO DE PRODUCTOS
+    // ============================================================
+    const grid = document.getElementById('productGrid');
+
+    function renderizarProductos(productos) {
+        console.log('🎨 === RENDERIZANDO PRODUCTOS ===');
+        console.log('📦 Cantidad de productos:', productos?.length || 0);
+
+        grid.innerHTML = '';
+
+        // Mostrar productos de ejemplo si no hay datos reales
+        const productosMostrar = productos && productos.length > 0 ? productos : getProductosEjemplo();
+
+        if (!productosMostrar || productosMostrar.length === 0) {
+            grid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                    <h3>📦 No hay productos disponibles</h3>
+                    <p>Verifica la conexión con Dolibarr</p>
+                    <p style="font-size: 0.8rem; margin-top: 10px; color: var(--text-muted);">
+                        ⚠️ Revisa la consola del navegador (F12) para más detalles
+                    </p>
+                </div>
+            `;
+            return;
+        }
+
+        productosMostrar.forEach((p, index) => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+
+            // Mapear campos (con logs para depuración)
+            const nombre = p.label || p.name || p.nombre || 'Producto sin nombre';
+            const descripcion = p.description || p.descripcion || p.note || '';
+            const precio = parseFloat(p.price_ttc || p.price || p.precio || 0);
+            const stock = parseInt(p.stock || p.stock_physique || p.cantidad || 0);
+            const imagen = p.image || p.imagen || p.image_url || '';
+            const categoria = p.category_label || p.category || p.categoria || 'Producto';
+
+            console.log(`🔄 Producto ${index}:`, { nombre, precio, stock, categoria });
+
+            // Precio formateado
+            const precioFormateado = precio > 0 ? `S/ ${precio.toFixed(2)}` : 'S/ 0.00';
+            const precioAntes = precio > 0 ? `S/ ${(precio * 1.2).toFixed(2)}` : '';
+
+            // Imagen
+            let imagenHtml = '';
+            if (imagen && imagen.trim() !== '') {
+                imagenHtml = `<img src="${imagen}" alt="${nombre}" loading="lazy" onerror="this.style.display='none'">`;
+            } else {
+                const emojis = ['📦', '🍺', '🍻', '🥃', '🍷', '🧃', '🥤', '🎁'];
+                const emoji = emojis[index % emojis.length];
+                imagenHtml = `<span style="font-size: 4rem; line-height: 1;">${emoji}</span>`;
+            }
+
+            // Stock
+            let stockLabel = `<span>${stock} unidades</span>`;
+            if (stock < 10 && stock > 0) {
+                stockLabel = `<span class="low-stock">⚠️ ¡Últimas ${stock}!</span>`;
+            } else if (stock === 0) {
+                stockLabel = `<span style="color: #e94560;">❌ Agotado</span>`;
+            }
+
+            // WhatsApp
+            const mensajePersonalizado = `${MENSAJE_BASE}${nombre} (${precioFormateado})`;
+            const urlWhatsApp = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensajePersonalizado)}`;
+
+            const productoData = {
+                nombre: nombre,
+                precio: precioFormateado,
+                categoria: categoria,
+                ref: p.ref || p.id || '',
+                id: p.id || index
+            };
+
+            card.innerHTML = `
+                <div class="product-image">
+                    ${imagenHtml}
+                </div>
+                <div class="product-category">${categoria}</div>
+                <div class="product-name">${nombre}</div>
+                <div class="product-desc">${descripcion || 'Producto disponible'}</div>
+                <div class="product-price">
+                    ${precioFormateado}
+                    ${precioAntes ? `<small>${precioAntes}</small>` : ''}
+                </div>
+                <div class="product-stock">📦 Stock: ${stockLabel}</div>
+                <a href="${urlWhatsApp}" target="_blank" class="btn-cta" data-producto='${JSON.stringify(productoData)}'>
+                    💬 Comprar
+                </a>
+            `;
+
+            grid.appendChild(card);
+        });
+
+        // Actualizar contador
+        actualizarContador(productosMostrar.length);
+    }
+
+    function actualizarContador(cantidad) {
+        document.querySelector('.products-count')?.remove();
+        const header = document.querySelector('.products-header');
+        if (header) {
+            const count = document.createElement('span');
+            count.className = 'products-count';
+            count.textContent = `${cantidad} productos`;
+            header.appendChild(count);
+        }
+    }
+
+    // ============================================================
+    //  6. PRODUCTOS DE EJEMPLO (por si falla Dolibarr)
+    // ============================================================
+    function getProductosEjemplo() {
+        console.log('📦 Usando productos de ejemplo (fallback)');
+        return [
+            {
+                nombre: "Pilsen Lataza 473ml",
+                descripcion: "SixPack, sabor equilibrado y refrescante.",
+                precio: 32.00,
+                categoria: "Cervezas",
+                stock: 45,
+                imagen: "https://media.falabella.com/tottusPE/42437352_1/w=1200,h=1200,fit=pad"
+            },
+            {
+                nombre: "Cristal Lataza 473ml",
+                descripcion: "SixPack, sabor equilibrado y refrescante.",
+                precio: 21.50,
+                categoria: "Cervezas",
+                stock: 28,
+                imagen: "https://metroio.vtexassets.com/arquivos/ids/325445-800-auto?v=638180568461870000&width=800&height=auto&aspect=true"
+            },
+            {
+                nombre: "Pack Mix 12",
+                descripcion: "12 unidades variedad Dorada, Roja y Negra.",
+                precio: 69.90,
+                categoria: "Pack",
+                stock: 12,
+                imagen: "https://munkombucha.com/cdn/shop/files/MIX_PACK_250.png?v=1752750184&width=600"
+            },
+            {
+                nombre: "Promo RedLabel",
+                descripcion: "01 RedLabel 750ml + Guarana 3Lt + Hielo 3kg.",
+                precio: 45.90,
+                categoria: "Whisky",
+                stock: 8,
+                imagen: "https://www.happydrinkdelivery.com/wp-content/uploads/2022/04/JW-RED-LABEL-750-ML-GUARANA-2-L-2-KG-DE-HIELO.jpg"
+            }
+        ];
+    }
+
+    // ============================================================
+    //  7. CARGA INICIAL DE PRODUCTOS
+    // ============================================================
+    async function cargarProductos() {
+        console.log('🔄 === INICIANDO CARGA DE PRODUCTOS ===');
+        showToast('🔄 Conectando con Dolibarr...', 'success');
+
+        try {
+            const productos = await obtenerProductosDeDolibarr();
+            
+            if (productos && productos.length > 0) {
+                console.log(`✅ Éxito: ${productos.length} productos cargados desde Dolibarr`);
+                renderizarProductos(productos);
+                showToast(`✅ ${productos.length} productos cargados desde Dolibarr`, 'success');
+            } else {
+                console.warn('⚠️ No se recibieron productos de Dolibarr, usando ejemplos');
+                renderizarProductos(null); // Usará productos de ejemplo
+                showToast('⚠️ Usando productos de ejemplo (Dolibarr no respondió)', 'error');
+            }
+        } catch (error) {
+            console.error('❌ Error crítico:', error);
+            renderizarProductos(null);
+            showToast('❌ Error de conexión con Dolibarr', 'error');
+        }
+    }
+
+    // ============================================================
+    //  8. CONTADOR REGRESIVO
+    // ============================================================
+    const countdownDate = new Date();
+    countdownDate.setDate(countdownDate.getDate() + 3);
+    countdownDate.setHours(23, 59, 59, 0);
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = countdownDate.getTime() - now;
+
+        if (distance < 0) {
+            document.getElementById('days').textContent = '00';
+            document.getElementById('hours').textContent = '00';
+            document.getElementById('minutes').textContent = '00';
+            document.getElementById('seconds').textContent = '00';
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ============================================================
+    //  9. MODO OSCURO / CLARO
+    // ============================================================
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
+
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+
+        if (theme === 'light') {
+            themeIcon.textContent = '☀️';
+            themeLabel.textContent = 'Claro';
+        } else {
+            themeIcon.textContent = '🌙';
+            themeLabel.textContent = 'Oscuro';
+        }
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+    });
+
+    // ============================================================
+    //  10. CONFIGURAR HEADER DE PRODUCTOS
+    // ============================================================
+    const productsHeader = document.createElement('div');
+    productsHeader.className = 'products-header';
+    productsHeader.innerHTML = `
+        <h3 class="products-title">🛒 Productos disponibles</h3>
+        <span class="products-count">⏳ Cargando...</span>
+    `;
+    grid.parentNode.insertBefore(productsHeader, grid);
+
+    // ============================================================
+    //  11. FUNCIÓN PARA REGISTRAR COMPRA (simplificada)
+    // ============================================================
+    async function registrarIntencionCompra(producto) {
+        console.log('🛒 Intención de compra:', producto);
+        showToast(`✅ ${producto.nombre} - Pedido registrado`, 'success');
+    }
+
+    // ============================================================
+    //  12. EJECUTAR
+    // ============================================================
+    console.log('🚀 ===== FLYER INICIADO =====');
+    console.log('📡 Conectando a:', DOLIBARR_API_URL);
+    console.log('🔑 API Key configurada:', DOLIBARR_API_KEY ? '✅ Sí' : '❌ No');
+
+    cargarProductos();
+
+    // ============================================================
+    //  13. DETECTAR ERRORES DE CORS
+    // ============================================================
+    // Si hay error de CORS, se capturará en la consola
+    console.log('ℹ️ Si ves errores de CORS, necesitas configurar tu servidor Dolibarr');
+    console.log('📖 Documentación: https://wiki.dolibarr.org/index.php/REST_API');
+
+})();
+</script>
+</body>
+</html>
